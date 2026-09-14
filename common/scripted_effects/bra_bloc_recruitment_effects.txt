@@ -20,6 +20,7 @@ bra_scan_recruitment_candidates_effect = {
 			save_temporary_scope_as = target_house
 			if = {
 				limit = { bra_can_recruit_house_trigger = yes }
+				debug_log = "bra_bloc_recruitment: candidate found (other bloc) - [scope:target_house.GetName]"
 				root = {
 					add_to_variable_list = { name = bra_candidate_houses target = scope:target_house }
 				}
@@ -38,6 +39,7 @@ bra_scan_recruitment_candidates_effect = {
 			house = { save_temporary_scope_as = target_house }
 			if = {
 				limit = { bra_can_recruit_house_trigger = yes }
+				debug_log = "bra_bloc_recruitment: candidate found (independent) - [scope:target_house.GetName]"
 				root = {
 					add_to_variable_list = { name = bra_candidate_houses target = scope:target_house }
 				}

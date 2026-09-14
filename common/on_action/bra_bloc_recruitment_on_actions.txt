@@ -23,6 +23,7 @@ bra_bloc_recruitment_pulse = {
 				NOT = { has_variable = bra_scan_active }
 				bra_is_bloc_leader_trigger = yes
 			}
+			debug_log = "bra_bloc_recruitment: chain start for [ROOT.GetName] ([ROOT.GetHouse.GetName])"
 			trigger_event = bloc_recruitment_notification.0001
 		}
 	}
