@@ -1,0 +1,14 @@
+l_english:
+ # 候補家の所属Bloc表示（common/customizable_localization/bra_bloc_recruitment_custom_loc.txt から参照）
+ bra_candidate_bloc_status_affiliated:0 "[recipient.GetConfederation.GetName]"
+ bra_candidate_bloc_status_independent:0 "Independent"
+
+ # important_action: bra_recruitment_candidate_alert
+ bra_recruitment_candidate_alert:0 "House Available to Recruit"
+ bra_recruitment_candidate_alert_label:0 "House Available to Recruit"
+ bra_recruitment_candidate_alert_desc:0 "[house|E] [recipient.GetHouse.GetBaseName] can now be invited to join your Bloc.\n\nCurrent affiliation: [recipient.Custom('GetBraCandidateBlocStatus')]"
+ bra_recruitment_candidate_alert_click:0 "#I Click to view [recipient.GetHouse.GetBaseName]'s leader#!"
+ bra_recruitment_candidate_alert_combined_label:0 "Houses Available to Recruit"
+ bra_recruitment_candidate_alert_combined_group_label:0 "Houses Available to Recruit: $NUM$"
+ bra_recruitment_candidate_alert_combined_group_name:0 "Houses Available to Recruit"
+ bra_recruitment_candidate_alert_combined_group_description:0 "These houses are eligible to be invited to join your Bloc."

@@ -1,0 +1,15 @@
+# Bloc Recruitment Alerts — 候補家の所属Bloc表示（条件分岐テキスト）
+# root = character（important_actionsのrecipient = 候補家の当主）
+
+GetBraCandidateBlocStatus = {
+	type = character
+
+	text = {
+		trigger = { exists = house_confederation }
+		localization_key = bra_candidate_bloc_status_affiliated
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = bra_candidate_bloc_status_independent
+	}
+}
