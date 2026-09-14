@@ -1,0 +1,21 @@
+namespace = bloc_recruitment_notification
+
+# 月次スキャンの本体。隠しイベントとして自己再帰する。
+# root = プレイヤー（陣営指導者だった時点のcharacter）
+bloc_recruitment_notification.0001 = {
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = { bra_is_bloc_leader_trigger = yes }
+			# 4ヶ月の自己修復ロックを毎月延長する（common/scripted_effects/bra_bloc_recruitment_effects.txt参照）
+			set_variable = { name = bra_scan_active months = 4 }
+			bra_scan_recruitment_candidates_effect = yes
+			trigger_event = { id = bloc_recruitment_notification.0001 months = 1 }
+		}
+		else = {
+			# 陣営指導者でなくなった場合（死亡・失脚含む）はチェーンを止め、状態を全消去する
+			bra_bloc_recruitment_clear_state_effect = yes
+		}
+	}
+}

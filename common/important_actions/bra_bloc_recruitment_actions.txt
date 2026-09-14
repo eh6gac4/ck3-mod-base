@@ -1,0 +1,27 @@
+# Bloc Recruitment Alerts — 警告枠
+#
+# 月次スキャン（bra_scan_recruitment_candidates_effect）の結果を読むだけ。
+# ここでBloc判定の再スキャンは行わない（エンジンから頻繁に呼ばれるため）。
+
+bra_recruitment_candidate_alert = {
+	type = alert
+	combine_into_one = yes
+
+	check_create_action = {
+		every_in_list = {
+			variable = bra_candidate_houses
+			try_create_important_action = {
+				important_action_type = bra_recruitment_candidate_alert
+				recipient = house_head
+			}
+		}
+	}
+
+	effect = {
+		scope:recipient = {
+			open_view_data = {
+				view = character
+			}
+		}
+	}
+}

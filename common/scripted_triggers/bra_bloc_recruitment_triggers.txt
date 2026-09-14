@@ -1,0 +1,94 @@
+# Bloc Recruitment Alerts — 勧誘可否判定
+#
+# CK3本体には「勧誘可能」を表す単一のtriggerが存在しない。
+# 条件は common/character_interactions/10_tgp_japan_interactions.txt の
+# invite_to_house_bloc_interaction (redirect / is_available / is_shown /
+# is_valid_showing_failures_only, 概ね1-190行) に直書きされているため、
+# ここでその条件を複製する。本体アップデートで乖離しうるので、
+# 追従時は上記ファイルと突き合わせて確認すること。
+
+# root = 判定対象character。陣営（Bloc）の指導者かどうか。
+# is_aliveを見ているのは、指導者の死亡時に月次チェーン（events/bra_bloc_recruitment_events.txt）
+# を確実に停止させるため（死亡characterに対してイベントが動き続けるのを防ぐ）。
+bra_is_bloc_leader_trigger = {
+	is_alive = yes
+	tgp_uses_house_blocs_trigger = yes
+	exists = house.house_confederation
+	house.house_confederation.leading_house ?= house
+}
+
+# root = 勧誘する側character（陣営指導者を想定）
+# scope:target_house = 勧誘対象の家
+# invite_to_house_bloc_interaction の is_available / is_valid_showing_failures_only
+# を再現。custom_tooltipのラップは外し、中の条件のみを残す。
+bra_can_recruit_house_trigger = {
+	# --- 招待側（root）の条件 ---
+	tgp_house_bloc_interaction_valid_trigger = yes # is_ruler / DLC / 政体フラグ / 最高位>=county
+	tgp_house_bloc_interaction_valid_showing_failures_trigger = yes # house head + noble family title保有
+	is_at_war = no
+	house.house_head ?= this
+	OR = {
+		is_landed = yes
+		tgp_is_ceremonial_liege_trigger = yes
+	}
+	# 陣営を持っているなら、自分がその陣営の指導者家であること
+	trigger_if = {
+		limit = { exists = house.house_confederation }
+		house.house_confederation.leading_house.house_head ?= this
+	}
+
+	# --- 対象側（scope:target_house）の条件 ---
+	scope:target_house = {
+		# 自分の家ではない
+		this != root.house
+		# 自分の陣営には所属していない（同一陣営は対象外）
+		trigger_if = {
+			limit = { exists = root.house.house_confederation }
+			NOT = { house_confederation ?= root.house.house_confederation }
+		}
+		house_head ?= {
+			is_alive = yes
+			tgp_house_bloc_interaction_valid_trigger = yes
+			tgp_house_bloc_interaction_valid_showing_failures_trigger = yes
+			is_at_war = no
+			top_liege = root.top_liege # 同じ実現割に属する
+
+			# 封臣関係の制約（独立君主なら不要）
+			trigger_if = {
+				limit = { is_independent_ruler = no }
+				OR = {
+					liege = root.liege # 同じ直上主君
+					liege = root # rootが自分の主君
+					AND = { # rootが自分の主君の主君で、rootが帝国位未満
+						liege.liege = root
+						root = { highest_held_title_tier < tier_empire }
+					}
+					liege = { # 自分の主君の家がrootの陣営に所属
+						house.house_confederation = root.house.house_confederation
+					}
+				}
+			}
+		}
+		# 陣営リーダーは引き抜けない
+		NOT = {
+			exists = house_confederation
+			house_confederation.leading_house.house_head ?= house_head
+		}
+		# 離脱直後のクールダウン中ではない（自分の陣営に対して）
+		trigger_if = {
+			limit = { exists = root.house.house_confederation }
+			NOT = {
+				any_in_list = {
+					variable = left_bloc_cooldown
+					root.house.house_confederation ?= this
+				}
+			}
+		}
+		# 加入直後（引き抜かれたばかり）ではない
+		NOT = { has_variable = recently_joined_bloc }
+	}
+}
+# 検知対象は「A: Bloc未所属」「B: 他Bloc所属」の家だが、上記条件はこの2つで
+# 網羅的（scope:target_houseがhouse_confederationを持つか持たないかの両方を許容
+# している）ため、A/Bを判別する追加条件は不要。呼び出し側は
+# bra_can_recruit_house_trigger を直接呼ぶ。

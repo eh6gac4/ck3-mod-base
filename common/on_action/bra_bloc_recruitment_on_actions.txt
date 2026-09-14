@@ -1,0 +1,29 @@
+# Bloc Recruitment Alerts — 月次チェーンの起点
+#
+# CK3にはグローバルなon_monthly_pulseが存在しないため、四半期ごとに呼ばれる
+# quarterly_playable_pulseから自前の月次チェーンを起動する。
+#
+# 本体のon_actionファイルは上書きしない。公式ドキュメント
+# (common/on_action/_on_actions.info 内 MODDING INFO) が明示する安全な拡張方法
+# 「vanilla on_action の on_actions リストへ自分のon_actionを追加する」を使う。
+
+quarterly_playable_pulse = {
+	on_actions = { bra_bloc_recruitment_pulse }
+}
+
+bra_bloc_recruitment_pulse = {
+	trigger = {
+		is_ai = no
+	}
+	effect = {
+		# bra_scan_active（期限付き変数）が無ければ月次チェーンは動いていない。
+		# チェーンが途切れて自然失効した場合もここで再起動される。
+		if = {
+			limit = {
+				NOT = { has_variable = bra_scan_active }
+				bra_is_bloc_leader_trigger = yes
+			}
+			trigger_event = bloc_recruitment_notification.0001
+		}
+	}
+}
