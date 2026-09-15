@@ -95,5 +95,48 @@ bra_can_recruit_house_trigger = {
 }
 # 検知対象は「A: Bloc未所属」「B: 他Bloc所属」の家だが、上記条件はこの2つで
 # 網羅的（scope:target_houseがhouse_confederationを持つか持たないかの両方を許容
-# している）ため、A/Bを判別する追加条件は不要。呼び出し側は
-# bra_can_recruit_house_trigger を直接呼ぶ。
+# している）ため、A/Bを判別する追加条件は不要。
+
+# root = 招待する側character（プレイヤー）、scope:target_house = 勧誘対象の家
+# 「送れるか」だけでなく、送った場合に実際に受け入れられそうかまで判定する。
+#
+# 【この判定はあくまで近似であり、断定的な保証ではない】
+# invite_to_house_bloc_interaction の ai_accept はCK3の型定義上 mtth
+# （common/character_interactions/_character_interactions.info 参照）であり、
+# 単純な「スコア0以上なら必ず採用」という決定論的なtriggerではなく、本来は
+# 確率的な採用判定に使われる値。ここではその値を「0以上なら概ね受け入れて
+# もらえる候補」という目安として流用しているに過ぎず、閾値0はスコアが高いほど
+# 良いという相対的な意味しか保証しない。
+# また、ここで呼んでいる house_bloc_desire_to_join_modifiers /
+# house_relation_ai_accept_modifiers 内の opinion_modifier（Opinion由来の加減点、
+# 最大±100分の比重を占める）は、本体では常にinteractionのai_accept評価内でのみ
+# 使われており、ここでのようにsave_temporary_scope_value_asのvalue={}計算内で
+# 呼び出す前例が本体に見当たらない。同じ計算結果になる保証はなく、Opinion分が
+# 反映されない・別の値になる可能性がある。
+# ゴールド/威信/影響力/フックによる上乗せ、招待側が天皇であることの+50は含めない
+# （送信時にプレイヤーが選ぶ上乗せ要素であり、ここでは「何もしなくても入るか」を見る）。
+# 本体アップデートによる乖離は本ファイル冒頭の注記の通り。
+bra_will_join_bloc_trigger = {
+	bra_can_recruit_house_trigger = yes
+	scope:target_house = {
+		house_head = {
+			save_temporary_scope_value_as = {
+				name = bra_accept_score
+				value = {
+					base = -50
+					house_bloc_desire_to_join_modifiers = {
+						JOINER = this
+						INVITER = root
+						MULTIPLIER = 1
+					}
+					house_relation_ai_accept_modifiers = {
+						HOUSE_1_MEMBER = root
+						HOUSE_2_MEMBER = this
+						MULTIPLIER = 1
+					}
+				}
+			}
+			scope:bra_accept_score >= 0
+		}
+	}
+}

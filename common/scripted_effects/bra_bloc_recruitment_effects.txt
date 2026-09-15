@@ -19,7 +19,7 @@ bra_scan_recruitment_candidates_effect = {
 		every_confederation_member_house = {
 			save_temporary_scope_as = target_house
 			if = {
-				limit = { bra_can_recruit_house_trigger = yes }
+				limit = { bra_will_join_bloc_trigger = yes }
 				debug_log = "bra_bloc_recruitment: candidate found (other bloc)"
 				root = {
 					add_to_variable_list = { name = bra_candidate_houses target = scope:target_house }
@@ -38,7 +38,7 @@ bra_scan_recruitment_candidates_effect = {
 			}
 			house = { save_temporary_scope_as = target_house }
 			if = {
-				limit = { bra_can_recruit_house_trigger = yes }
+				limit = { bra_will_join_bloc_trigger = yes }
 				debug_log = "bra_bloc_recruitment: candidate found (independent)"
 				root = {
 					add_to_variable_list = { name = bra_candidate_houses target = scope:target_house }
