@@ -1,4 +1,4 @@
-# Bloc Recruitment Alerts — 勧誘可否判定
+﻿# Bloc Recruitment Alerts — 勧誘可否判定
 #
 # CK3本体には「勧誘可能」を表す単一のtriggerが存在しない。
 # 条件は common/character_interactions/10_tgp_japan_interactions.txt の

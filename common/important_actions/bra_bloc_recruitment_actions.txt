@@ -1,11 +1,11 @@
-# Bloc Recruitment Alerts — 警告枠
+﻿# Bloc Recruitment Alerts — 警告枠
 #
 # 月次スキャン（bra_scan_recruitment_candidates_effect）の結果を読むだけ。
 # ここでBloc判定の再スキャンは行わない（エンジンから頻繁に呼ばれるため）。
 
 bra_recruitment_candidate_alert = {
 	type = alert
-	combine_into_one = yes
+	# type=alertはcombine_into_oneと併用できない（本体の制約。1件ずつ独立したアラートとして表示される）
 
 	check_create_action = {
 		every_in_list = {

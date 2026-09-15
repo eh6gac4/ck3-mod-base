@@ -1,4 +1,4 @@
-l_japanese:
+﻿l_japanese:
  # 候補家の所属Bloc表示（common/customizable_localization/bra_bloc_recruitment_custom_loc.txt から参照）
  bra_candidate_bloc_status_affiliated:0 "[recipient.GetConfederation.GetName]"
  bra_candidate_bloc_status_independent:0 "所属なし"
@@ -8,7 +8,3 @@ l_japanese:
  bra_recruitment_candidate_alert_label:0 "勧誘可能な家があります"
  bra_recruitment_candidate_alert_desc:0 "[house|E] [recipient.GetHouse.GetBaseName]をあなたのBlocへ勧誘できるようになりました。\n\n現在の所属：[recipient.Custom('GetBraCandidateBlocStatus')]"
  bra_recruitment_candidate_alert_click:0 "#I クリックして[recipient.GetHouse.GetBaseName]の当主を確認#!"
- bra_recruitment_candidate_alert_combined_label:0 "勧誘可能な家があります"
- bra_recruitment_candidate_alert_combined_group_label:0 "勧誘可能な家：$NUM$"
- bra_recruitment_candidate_alert_combined_group_name:0 "勧誘可能な家"
- bra_recruitment_candidate_alert_combined_group_description:0 "これらの家は、あなたのBlocへ勧誘できる状態にあります。"
