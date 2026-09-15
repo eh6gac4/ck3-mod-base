@@ -22,19 +22,24 @@ bra_is_bloc_leader_trigger = {
 # invite_to_house_bloc_interaction の is_available / is_valid_showing_failures_only
 # を再現。custom_tooltipのラップは外し、中の条件のみを残す。
 bra_can_recruit_house_trigger = {
-	# --- 招待側（root）の条件 ---
-	tgp_house_bloc_interaction_valid_trigger = yes # is_ruler / DLC / 政体フラグ / 最高位>=county
-	tgp_house_bloc_interaction_valid_showing_failures_trigger = yes # house head + noble family title保有
-	is_at_war = no
-	house.house_head ?= this
-	OR = {
-		is_landed = yes
-		tgp_is_ceremonial_liege_trigger = yes
-	}
-	# 陣営を持っているなら、自分がその陣営の指導者家であること
-	trigger_if = {
-		limit = { exists = house.house_confederation }
-		house.house_confederation.leading_house.house_head ?= this
+	# --- 招待側（root=プレイヤー）の条件 ---
+	# every_confederation_member_house / every_vassal_or_below の内側から呼ばれるため、
+	# thisは候補側（house または candidate character）になっている。無条件のまま書くと
+	# 誤って候補側に対して評価されてしまうため、必ずroot（プレイヤー）へ明示的に切り替える。
+	root = {
+		tgp_house_bloc_interaction_valid_trigger = yes # is_ruler / DLC / 政体フラグ / 最高位>=county
+		tgp_house_bloc_interaction_valid_showing_failures_trigger = yes # house head + noble family title保有
+		is_at_war = no
+		house.house_head ?= this
+		OR = {
+			is_landed = yes
+			tgp_is_ceremonial_liege_trigger = yes
+		}
+		# 陣営を持っているなら、自分がその陣営の指導者家であること
+		trigger_if = {
+			limit = { exists = house.house_confederation }
+			house.house_confederation.leading_house.house_head ?= this
+		}
 	}
 
 	# --- 対象側（scope:target_house）の条件 ---
