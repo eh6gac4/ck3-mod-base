@@ -103,38 +103,71 @@ bra_can_recruit_house_trigger = {
 # 【この判定はあくまで近似であり、断定的な保証ではない】
 # invite_to_house_bloc_interaction の ai_accept はCK3の型定義上 mtth
 # （common/character_interactions/_character_interactions.info 参照）で、
-# house_bloc_desire_to_join_modifiers / house_relation_ai_accept_modifiers
-# （common/scripted_modifiers/10_tgp_japan_modifiers.txt）という専用文法の
-# scripted_modifier（modifier= / opinion_modifier=）で組み立てられている。
-# この文法はscript_value（save_temporary_scope_value_asのvalue={}）とは
-# 別物で両立できないため、本体の計算式をそのまま再現することはできない。
-# そのため、ai_acceptの中で特に比重が大きいOpinion（±25分）とHouse
-# Relation（feud -50 / rivalry -25分）だけを通常のtriggerとして直接抽出し、
-# 「Opinionが極端に悪くなく、House Relationも険悪でない」ことを目安として
-# 判定する。相対的な威信・影響力・軍事力による加減点（各最大±X分）は
+# base = -50 からスタートし、house_bloc_desire_to_join_modifiers /
+# house_relation_ai_accept_modifiers（common/scripted_modifiers/
+# 10_tgp_japan_modifiers.txt）という専用文法のscripted_modifier
+# （modifier= / opinion_modifier=）を積み上げて合計する。この専用文法は
+# script_value（save_temporary_scope_value_asのvalue={}）とは別物で
+# 両立できないため、scripted_modifierをそのまま呼び出すことはできない。
+# そのため、base = -50 を起点に、比重が特に大きいOpinion（Opinion of
+# Inviter、最大+25分）とHouse Relation（feud -50 〜 amity +50）の２項目
+# だけを通常のscript_value演算（if/else_if/add）で計算し直して合計する。
+# Opinionの計算式は house_bloc_desire_to_join_modifiers の該当項
+# （multiplier = 0.5, max = 25）を再現しているが、step（丸め）の再現は
+# 省略している。また、Bloc指導者のOpinion（招待側/対象側それぞれの
+# 指導者に対する項）、相対的な威信・影響力・軍事力による加減点は
 # 反映されないため、これらが強く効くケースでは実際の受諾可否とずれうる。
 bra_will_join_bloc_trigger = {
 	bra_can_recruit_house_trigger = yes
 	scope:target_house = {
 		house_head = {
-			opinion = {
+			save_temporary_opinion_value_as = {
+				name = bra_opinion_of_inviter
 				target = root
-				value >= 0
 			}
-			NOT = {
-				OR = {
-					tgp_has_house_relation_level_trigger = {
-						HOUSE_1_MEMBER = this
-						HOUSE_2_MEMBER = root
-						LEVEL = feud
+			save_temporary_scope_value_as = {
+				name = bra_accept_score
+				value = {
+					value = -50
+					add = {
+						value = scope:bra_opinion_of_inviter
+						multiply = 0.5
+						max = 25
 					}
-					tgp_has_house_relation_level_trigger = {
-						HOUSE_1_MEMBER = this
-						HOUSE_2_MEMBER = root
-						LEVEL = rivalry
+					this.house = {
+						every_house_relation = {
+							limit = {
+								any_relation_house = { this = root.house }
+							}
+							if = {
+								limit = { has_house_relation_level = feud }
+								add = -50
+							}
+							else_if = {
+								limit = { has_house_relation_level = rivalry }
+								add = -25
+							}
+							else_if = {
+								limit = { has_house_relation_level = quarrel }
+								add = -10
+							}
+							else_if = {
+								limit = { has_house_relation_level = cordial }
+								add = 10
+							}
+							else_if = {
+								limit = { has_house_relation_level = friendly }
+								add = 25
+							}
+							else_if = {
+								limit = { has_house_relation_level = amity }
+								add = 50
+							}
+						}
 					}
 				}
 			}
+			scope:bra_accept_score >= 0
 		}
 	}
 }
