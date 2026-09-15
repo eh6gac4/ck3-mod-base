@@ -1,4 +1,4 @@
-# Bloc Recruitment Alerts — 月次チェーンの起点
+﻿# Bloc Recruitment Alerts — 月次チェーンの起点
 #
 # CK3にはグローバルなon_monthly_pulseが存在しないため、四半期ごとに呼ばれる
 # quarterly_playable_pulseから自前の月次チェーンを起動する。
@@ -23,7 +23,7 @@ bra_bloc_recruitment_pulse = {
 				NOT = { has_variable = bra_scan_active }
 				bra_is_bloc_leader_trigger = yes
 			}
-			debug_log = "bra_bloc_recruitment: chain start for [ROOT.GetName] ([ROOT.GetHouse.GetName])"
+			debug_log = "bra_bloc_recruitment: chain start for [ROOT.Char.GetName] ([ROOT.Char.GetHouse.GetName])"
 			trigger_event = bloc_recruitment_notification.0001
 		}
 	}

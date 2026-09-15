@@ -1,4 +1,4 @@
-# Bloc Recruitment Alerts — 候補家の所属Bloc表示（条件分岐テキスト）
+﻿# Bloc Recruitment Alerts — 候補家の所属Bloc表示（条件分岐テキスト）
 # root = character（important_actionsのrecipient = 候補家の当主）
 
 GetBraCandidateBlocStatus = {
