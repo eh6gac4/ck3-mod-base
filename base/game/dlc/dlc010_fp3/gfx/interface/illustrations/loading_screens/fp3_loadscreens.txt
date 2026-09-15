@@ -1,0 +1,3 @@
+﻿persia = {
+	priority = 6
+}

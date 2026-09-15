@@ -1,0 +1,3 @@
+﻿new_basileus = {
+	priority = 8
+}

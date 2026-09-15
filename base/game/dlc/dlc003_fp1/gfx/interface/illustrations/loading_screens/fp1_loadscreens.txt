@@ -1,0 +1,3 @@
+﻿runestone = {
+	priority = 2
+}

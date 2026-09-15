@@ -1,0 +1,3 @@
+﻿court = {
+	priority = 3
+}

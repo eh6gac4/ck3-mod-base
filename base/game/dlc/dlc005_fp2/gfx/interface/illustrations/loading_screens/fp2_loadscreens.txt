@@ -1,0 +1,3 @@
+﻿chess = {
+	priority = 4
+}
