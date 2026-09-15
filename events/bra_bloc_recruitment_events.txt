@@ -10,13 +10,13 @@ bloc_recruitment_notification.0001 = {
 			limit = { bra_is_bloc_leader_trigger = yes }
 			# 4ヶ月の自己修復ロックを毎月延長する（common/scripted_effects/bra_bloc_recruitment_effects.txt参照）
 			set_variable = { name = bra_scan_active months = 4 }
-			debug_log = "bra_bloc_recruitment: monthly scan run for [ROOT.Char.GetName] ([ROOT.Char.GetHouse.GetName])"
+			debug_log = "bra_bloc_recruitment: monthly scan run"
 			bra_scan_recruitment_candidates_effect = yes
 			trigger_event = { id = bloc_recruitment_notification.0001 months = 1 }
 		}
 		else = {
 			# 陣営指導者でなくなった場合（死亡・失脚含む）はチェーンを止め、状態を全消去する
-			debug_log = "bra_bloc_recruitment: chain stop for [ROOT.Char.GetName] (no longer bloc leader)"
+			debug_log = "bra_bloc_recruitment: chain stop (no longer bloc leader)"
 			bra_bloc_recruitment_clear_state_effect = yes
 		}
 	}

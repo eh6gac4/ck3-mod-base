@@ -5,6 +5,7 @@
 
 bra_recruitment_candidate_alert = {
 	type = alert
+	icon = bra_recruitment_candidate_alert # gfx/interface/icons/alerts/bra_recruitment_candidate_alert.dds
 	# type=alertはcombine_into_oneと併用できない（本体の制約。1件ずつ独立したアラートとして表示される）
 
 	check_create_action = {
